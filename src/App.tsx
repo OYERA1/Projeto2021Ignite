@@ -1,26 +1,34 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import Modal from "react-modal";
+import { Header } from "./components/Header";
+import { DashBoard } from "./components/Dashboard";
 
-function App() {
+import { GlobalStyle } from "./styles/global";
+import { NewTransactionModal } from "./components/newTransationModal";
+import { TransactionProvider } from "./hooks/useTransactions";
+
+Modal.setAppElement("#root");
+
+export function App() {
+  const [transactionModal, setTransactionModal] = useState(false);
+
+  function handleOpenNewTransactionModal() {
+    setTransactionModal(true);
+  }
+
+  function handleCloseTransactionModal() {
+    setTransactionModal(false);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <TransactionProvider>
+      <Header handleOpen={handleOpenNewTransactionModal} />
+      <DashBoard />
+      <NewTransactionModal
+        isOpen={transactionModal}
+        onRequestClose={handleCloseTransactionModal}
+      />
+      <GlobalStyle />
+    </TransactionProvider>
   );
 }
-
-export default App;
